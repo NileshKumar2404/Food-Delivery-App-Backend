@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     },
     refreshToken: {
         type: String,
+    },
+    vehicleDetails: {
+        vehicleName: String,
+        vehicleNumber: Number
     }
 },{timestamps: true})
 
