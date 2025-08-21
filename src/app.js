@@ -17,5 +17,10 @@ app.use((req, res, next) => {
     next()
 })
 
+import userRouter from "./routes/user.routes.js"
+import addressRouter from "./routes/address.routes.js"
+
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/address", addressRouter)
 
 export {app}
