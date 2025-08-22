@@ -454,7 +454,7 @@ const getAllUsers = asyncHandler(async ( req, res ) => {
     
         const userList = getUser[0].data
         const totalUsers = getUser[0].totalCount.length > 0? getUser[0].totalCount[0].count : 0
-        const totalPage = Math.cell(totalUsers/limit)
+        const totalPage = Math.ceil(totalUsers/limit)
     
         return res
         .status(201)
