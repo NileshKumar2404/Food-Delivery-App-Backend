@@ -22,11 +22,13 @@ import addressRouter from "./routes/address.routes.js"
 import restaurantRouter from "./routes/restaurant.routes.js"
 import menuItemRouter from "./routes/menuItem.routes.js"
 import orderRouter from "./routes/order.routes.js"
+import deliveryTrackingRouter from "./routes/deliveryTracking.routes.js"
 
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/address", addressRouter)
 app.use("/api/v1/restaurant", restaurantRouter)
 app.use("/api/v1/menuItem", menuItemRouter)
 app.use("/api/v1/order", orderRouter)
+app.use("/api/v1/deliveryTracking", deliveryTrackingRouter)
 
 export {app}
