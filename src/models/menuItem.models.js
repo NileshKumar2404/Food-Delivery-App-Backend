@@ -26,7 +26,11 @@ const menuItemSchema = new mongoose.Schema({
     isAvailable: {
         type: Boolean,
         default: true
-    }
+    },
+    ratings: {
+        type: Number,
+        default: 0
+    },
 },{timestamps: true})
 
 export const MenuItem = mongoose.model('MenuItem', menuItemSchema)
