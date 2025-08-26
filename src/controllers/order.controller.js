@@ -7,6 +7,86 @@ import { Address } from "../models/address.models.js"
 import { MenuItem } from "../models/menuItem.models.js"
 import { User } from "../models/user.models.js"
 
+// const placeOrder = asyncHandler(async (req, res) => {
+//     try {
+//         const { restaurantId, items, addressId, paymentMethod } = req.body
+    
+//         if(!items || !restaurantId || items.length === 0 || !addressId || !paymentMethod) {
+//             throw new ApiError(400, "All fields are required.")
+//         }
+    
+//         const restaurant = await Restaurant.findById(restaurantId)
+//         if(!restaurant) throw new ApiError(404, "Restaurant not found.");
+    
+//         const address = await Address.findOne({_id: addressId, user: req.user._id})
+//         if(!address) throw new ApiError(404, "Invalid delivery address");
+    
+//         let totalPrice = 0
+//         const orderItems = []
+    
+//         for(const item of items) {
+//             const menuItem = await MenuItem.findById(item.menuItem)
+//             if(!menuItem) throw new ApiError(404, `Menu item not found: ${item.menuItem}`);
+    
+//             const itemTotal = menuItem.price * item.quantity
+//             totalPrice += itemTotal
+    
+//             orderItems.push({
+//                 menuItem: menuItem._id,
+//                 quantity: item.quantity,
+//                 price: menuItem.price
+//             })
+//         }
+
+//         let paymentData = {
+//             method: paymentMethod,
+//             status: 'Pending'
+//         }
+
+//         if (paymentMethod === "COD") {
+//             paymentData.status = "Pending" //It will modified after payment recieved
+//         }else if (paymentMethod === "ONLINE") {
+//             paymentData.status = "Initiated"
+//             paymentData.transactionId = `txn_${Date.now()}`  
+//         }
+
+    
+//         // const order = await Order.create({
+//         //     customer: req.user._id,
+//         //     restaurant: restaurantId,
+//         //     items: orderItems,
+//         //     totalPrice,
+//         //     status: "Pending",
+//         //     deliveryAddress: addressId,
+//         //     payment: {
+//         //         method: paymentMethod,
+//         //         status: 'Pending'
+//         //     }
+//         // })
+
+//         const order = await Order.create({
+//             customer: req.user._id,
+//             restaurant: restaurantId,
+//             items: orderItems,
+//             totalPrice,
+//             status: "Pending",
+//             deliveryAddress: addressId,
+//             payment: paymentData
+//         })
+    
+//         return res
+//         .status(201)
+//         .json(new ApiResponse(
+//             201,
+//             {order},
+//             "Order placed successfully"
+//         ))
+//     } catch (error) {
+//         console.error("Error to place order:", error.message);
+//         throw new ApiError(500, "Failed to place order");
+//     }
+// })
+
 const placeOrder = asyncHandler(async (req, res) => {
     try {
         const { restaurantId, items, addressId, paymentMethod } = req.body
@@ -63,6 +143,7 @@ const placeOrder = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Failed to place order");
     }
 })
+
 
 //customer
 const getMyOrders = asyncHandler(async (req, res) => {
