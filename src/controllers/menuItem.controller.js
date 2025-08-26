@@ -1,8 +1,8 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { MenuItem } from "../models/menuItem.models";
-import { Restaurant } from "../models/restaurant.models";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { MenuItem } from "../models/menuItem.models.js";
+import { Restaurant } from "../models/restaurant.models.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js"
 
 const addMenuItem = asyncHandler(async (req, res) => {

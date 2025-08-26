@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {verifyJWT} from "../middlewares/auth.middlewares.js"
 import {upload} from "../middlewares/multer.middleware.js"
-import { changePassword, createDeliveryPartner, createRestaurant, createVendor, deleteUser, getAllUsers, getCustomerProfile, getDeliveryProfile, getVendorProfile, loginUser, logoutUser, refreshAccessToken, registerUser, updateProfile } from "../controllers/user.controller";
+import { changePassword, createDeliveryPartner, createRestaurant, createVendor, deleteUser, getAllUsers, getCustomerProfile, getDeliveryProfile, getVendorProfile, loginUser, logoutUser, refreshAccessToken, registerUser, updateProfile } from "../controllers/user.controller.js";
 
 const router = Router()
 
