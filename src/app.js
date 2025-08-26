@@ -1,8 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { Server } from "socket.io"
-import { createServer } from "http"
 
 const app = express()
 
@@ -35,26 +33,4 @@ app.use("/api/v1/order", orderRouter)
 app.use("/api/v1/deliveryTracking", deliveryTrackingRouter)
 app.use("/api/v1/review", reviewRouter)
 
-const httpServer = createServer(app)
-
-const io = new Server(httpServer, {
-    cors: {
-        origin: process.env.CORS_ORIGIN || "*",
-        methods: ['GET', 'POST']
-    }
-})
-
-io.on("connection", (socket) => {
-    console.log("New client connected:", socket.id);
-    
-    socket.on("joinRoom", (userId) => {
-        socket.join(userId)
-        console.log(`User ${userId} joined room`);
-    })
-
-    socket.on("disconnect", () => {
-        console.log("Client disconnected:", socket.id);
-    })
-})
-
-export {app, httpServer, io}
+export { app }

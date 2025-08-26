@@ -8,7 +8,7 @@ const updateDeliveryLocation = asyncHandler(async (req, res) => {
     try {
         const { orderId, latitude, longitude } = req.body
 
-        if ( !orderId || !latitude || !longitude ) throw new ApiError(403, "All these fields are required");
+        if ( !orderId || latitude === undefined || longitude === undefined) throw new ApiError(403, "All these fields are required");
 
         const order = await Order.findById(orderId)
         if (!order) throw new ApiError(403, "Order not found");
@@ -20,13 +20,13 @@ const updateDeliveryLocation = asyncHandler(async (req, res) => {
         let deliveryTracking = await DeliveryTracking.findOne({order: orderId})
 
         if (deliveryTracking) {
-            deliveryTracking.locationUpdates.push({lat: latitude, long: longitude})
+            deliveryTracking.locationUpdates.push({lat: latitude, long: longitude, timestamps: new Date()})
             await deliveryTracking.save()
         }else {
             deliveryTracking = await DeliveryTracking.create({
                 order: orderId,
                 deliveryPartner: req.user._id,
-                locationUpdates: [{lat: latitude, long: longitude}]
+                locationUpdates: [{lat: latitude, long: longitude, timestamps: new Date()}]
             })
         }
 

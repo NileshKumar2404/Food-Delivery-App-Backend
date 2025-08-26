@@ -144,7 +144,6 @@ const placeOrder = asyncHandler(async (req, res) => {
     }
 })
 
-
 //customer
 const getMyOrders = asyncHandler(async (req, res) => {
     const orders = await Order.aggregate([
