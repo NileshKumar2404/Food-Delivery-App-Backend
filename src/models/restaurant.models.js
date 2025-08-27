@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 const restaurantSchema = new mongoose.Schema({
     name: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: true
     },
     owner: {
@@ -19,11 +18,11 @@ const restaurantSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    cuisine: {
+    cuisine: [{
         type: String,
         required: true,
         enum: ['Chinese', 'Italian', 'Indian', 'Japanese', 'French']
-    },
+    }],
     ratings: {
         type: Number,
         default: 0

@@ -5,6 +5,7 @@ import { User } from "../models/user.models.js"
 import { Restaurant } from "../models/restaurant.models.js"
 import jwt from 'jsonwebtoken'
 import { uploadOnCloudinary } from "../utils/Cloudinary.js"
+import { Address } from "../models/address.models.js"
 
 const generateAccessTokenAndRefreshToken = async(userId) => {
     try {
@@ -118,7 +119,7 @@ const loginUser = asyncHandler(async ( req, res ) => {
         .cookie("refreshToken", refreshToken, options)
         .json(new ApiResponse(
             201,
-            {accessToken, refreshToken, loggedInUser},
+            {loggedInUser, accessToken, refreshToken},
             "User logged in successfully"
         ))
     } catch (error) {
@@ -157,6 +158,8 @@ const logoutUser = asyncHandler(async ( req, res ) => {
 const refreshAccessToken = asyncHandler(async ( req, res ) => {
     try {
         const incomingRefreshToken = req.body?.refreshToken || req.cookies.refreshToken
+
+        if(!incomingRefreshToken) throw new ApiError(401, "Unauthorized access");
     
         const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
     
@@ -184,8 +187,8 @@ const refreshAccessToken = asyncHandler(async ( req, res ) => {
             "Access token refreshed."
         ))
     } catch (error) {
-        throw new ApiError(401, "Failed to refresh access token")
         console.error("Failed to refresh access token: ", error.message);
+        throw new ApiError(401, "Failed to refresh access token")
     }
 })
 
@@ -211,8 +214,8 @@ const changePassword = asyncHandler(async ( req, res ) => {
             "Password updated successfully."
         ))
     } catch (error) {
-        throw new ApiError(401, "Failed to update password")
         console.error("Failed to update password: ", error.message);
+        throw new ApiError(401, "Failed to update password")
     }
 })
 
@@ -242,8 +245,8 @@ const updateProfile = asyncHandler(async ( req, res ) => {
             "Customer details updated successfully."
         ))
     } catch (error) {
+        console.error("Failed to update customer details: ", error.message)
         throw new ApiError(401, "Failed to update customer details")
-        console.error("Failed to update customer details: ", error.message);
     }
 })
 
@@ -323,9 +326,9 @@ const createVendor = asyncHandler(async ( req, res ) => {
 
 const createRestaurant = asyncHandler(async ( req, res ) => {
     try {
-        const {restaurantName, addressId, description, cuisine} = req.body
+        const {restaurantName, description, cuisine, street, city, state, pinCode} = req.body
     
-        if(!restaurantName || !addressId || !description || !cuisine) throw new ApiError(401, "All fields are required.");
+        if(!restaurantName || !description || !cuisine || !street || !city || !pinCode || !state) throw new ApiError(401, "All fields are required.");
     
         const image = req.file
         if(!image) throw new ApiError(401, "Image is required");
@@ -337,12 +340,22 @@ const createRestaurant = asyncHandler(async ( req, res ) => {
         if(!upload.url) throw new ApiError(401, "Failed to upload image on cloudinary");
     
         const onwerId = req.user._id
+        console.log(onwerId);
+        
         if(req.user.role !== 'vendor') throw new ApiError(401, "Only vendor can create restaurant.");
+
+        const newAddress = await Address.create({
+            street,
+            city,
+            state,
+            pinCode,
+            user: onwerId
+        })
     
         const newRestaurant = await Restaurant.create({
             name: restaurantName,
             owner: onwerId,
-            address: addressId,
+            address: newAddress._id,
             description: description,
             cuisine: cuisine,
             image: upload.url
@@ -406,8 +419,8 @@ const createDeliveryPartner = asyncHandler(async ( req, res ) => {
             "Vendor created successfully"
         ))
     } catch (error) {
-        throw new ApiError(401, "Failed to create delivery partner")
         console.error("Failed to create delivery partner: ", error.message);
+        throw new ApiError(401, "Failed to create delivery partner")
     }
 })
 

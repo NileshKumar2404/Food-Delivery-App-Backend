@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     },
     vehicleDetails: {
         vehicleName: String,
-        vehicleNumber: Number
+        vehicleNumber: String
     }
 },{timestamps: true})
 
