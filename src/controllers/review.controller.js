@@ -31,6 +31,8 @@ const addReview = asyncHandler(async (req, res) => {
             comment,
         })
 
+        let updateRating = null
+
         if (restaurantId) {
             const result = await Review.aggregate([
                 { $match: {restaurant: new mongoose.Types.ObjectId(restaurantId)} },
@@ -68,7 +70,7 @@ const getReviewForRestaurant = asyncHandler(async (req, res) => {
     const restaurant = await Review.aggregate([
         {
             $match: { 
-                restaurant: restaurantId
+                restaurant: new mongoose.Types.ObjectId(restaurantId)
             }
         },
         {
@@ -114,7 +116,7 @@ const getReviewForMenuItem = asyncHandler(async (req, res) => {
     const menuItem = await Review.aggregate([
         {
             $match: { 
-                menuItem: menuItemId
+                menuItem: new mongoose.Types.ObjectId(menuItemId)
             }
         },
         {

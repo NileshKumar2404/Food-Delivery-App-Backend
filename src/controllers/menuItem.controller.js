@@ -36,10 +36,10 @@ const addMenuItem = asyncHandler(async (req, res) => {
         const addMenuItem = await Restaurant.findByIdAndUpdate(
             restaurantId,
             {
-                $push: {menu: menuItem._id}
+                $addToSet: {menu: menuItem._id}
             },
             {new: true}
-        )
+        ).populate("menu")
         if(!addMenuItem) throw new ApiError(400, "Restaurant not found");
 
         return res
