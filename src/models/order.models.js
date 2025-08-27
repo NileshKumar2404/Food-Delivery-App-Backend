@@ -14,7 +14,7 @@ const orderSchema = new mongoose.Schema({
     items: [{
         menuItem: {type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem'},
         quantity: {type: Number, required: true},
-        price: {type: Number, required: true}
+        price: {type: Number}
     }],
     totalPrice: {
         type: Number,

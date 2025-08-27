@@ -35,6 +35,7 @@ const addAddress = asyncHandler(async (req, res) => {
     }
 })
 
+// TODO: Implement a role based address access
 const getUserAddresses = asyncHandler(async (req, res) => {
     const addresses = await Address.aggregate([
         {

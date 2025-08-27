@@ -32,12 +32,21 @@ const addMenuItem = asyncHandler(async (req, res) => {
             category,
             image: upload.url,
         })
-    
+
+        const addMenuItem = await Restaurant.findByIdAndUpdate(
+            restaurantId,
+            {
+                $push: {menu: menuItem._id}
+            },
+            {new: true}
+        )
+        if(!addMenuItem) throw new ApiError(400, "Restaurant not found");
+
         return res
         .status(201)
         .json(new ApiResponse(
             201,
-            {menuItem},
+            {menuItem, addMenuItem},
             "MenuItem created successfully."
         ))
     } catch (error) {
@@ -139,6 +148,7 @@ const deleteMenuItem = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Failed to delete menuItems");
     }
 })
+
 
 export {
     addMenuItem,
