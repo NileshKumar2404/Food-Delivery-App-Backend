@@ -201,5 +201,5 @@ export {
     getRestaurantById,
     getMyRestaurant,
     updateRestaurant,
-    deleteRestaurant
+    deleteRestaurant,
 }

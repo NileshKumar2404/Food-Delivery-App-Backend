@@ -149,10 +149,9 @@ const deleteMenuItem = asyncHandler(async (req, res) => {
     }
 })
 
-
 export {
     addMenuItem,
     getMenuItemsByRestaurant,
     updateMenuItem,
-    deleteMenuItem
+    deleteMenuItem,
 }
