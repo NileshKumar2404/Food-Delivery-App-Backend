@@ -35,6 +35,14 @@ const getAllRestaurants = asyncHandler(async (req, res) => {
                         { $skip: skip },
                         { $limit: limit },
                         {
+                            $lookup: {
+                                from: 'menuitems',
+                                localField: 'menu',
+                                foreignField: '_id',
+                                as: 'menu'
+                            }
+                        },
+                        {
                             $project: {
                                 name: 1,
                                 description: 1,
@@ -42,7 +50,13 @@ const getAllRestaurants = asyncHandler(async (req, res) => {
                                 rating: 1,
                                 image: 1,
                                 isOpen: 1,
-                                createdAt: 1
+                                createdAt: 1,
+                                "menu._id": 1,
+                                "menu.name": 1,
+                                "menu.description": 1,
+                                "menu.price": 1,
+                                "menu.image": 1,
+                                "menu.ratings": 1
                             }
                         }
                     ],
@@ -196,10 +210,51 @@ const deleteRestaurant = asyncHandler(async (req, res) => {
     }
 })
 
+const getFeaturedRestaurants = asyncHandler(async (req, res) => {
+    const featuredRestaurants = await Restaurant.find({featured: true})
+    .limit(10)
+    .select("name cuisine ratings address image")
+    if (!featuredRestaurants) throw new ApiError(404, "No featured restaurants are found");
+
+    return res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        {featuredRestaurants},
+        "Featured restaurants fetched successfully."
+    ))
+})
+
+const getTopRatedRestaurants = asyncHandler(async (req, res) => {
+    const topRatedRestaurants = await Restaurant.find()
+    .sort({ratings: -1})
+    .limit(10)
+    .select("name cuisine address ratings image")
+    .populate({
+        path: 'address',
+        select: 'street city',
+        options: {$limit: 1} 
+    })
+
+    if (topRatedRestaurants.length === 0) {
+        throw new ApiError(404, "No restaurants found");
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        {topRatedRestaurants},
+        "Top rated restaurants fetched successfully"
+    ))
+})
+
 export {
     getAllRestaurants,
     getRestaurantById,
     getMyRestaurant,
     updateRestaurant,
     deleteRestaurant,
+    getFeaturedRestaurants,
+    getTopRatedRestaurants
 }

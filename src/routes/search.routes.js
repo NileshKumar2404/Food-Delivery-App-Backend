@@ -4,7 +4,7 @@ import { searchMenuItems, searchRestaurants } from "../controllers/search.contro
 
 const router = Router()
 
-router.route("/search-restaurant").post(verifyJWT, searchRestaurants)
-router.route("/search-menu").post(verifyJWT, searchMenuItems)
+router.route("/search-restaurant").get(verifyJWT, searchRestaurants)
+router.route("/search-menu").get(verifyJWT, searchMenuItems)
 
 export default router

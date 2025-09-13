@@ -326,7 +326,7 @@ const createVendor = asyncHandler(async ( req, res ) => {
 
 const createRestaurant = asyncHandler(async ( req, res ) => {
     try {
-        const {restaurantName, description, cuisine, street, city, state, pinCode} = req.body
+        const {restaurantName, description, cuisine, street, city, state, pinCode, featured} = req.body
     
         if(!restaurantName || !description || !cuisine || !street || !city || !pinCode || !state) throw new ApiError(401, "All fields are required.");
     
@@ -358,7 +358,8 @@ const createRestaurant = asyncHandler(async ( req, res ) => {
             address: newAddress._id,
             description: description,
             cuisine: cuisine,
-            image: upload.url
+            image: upload.url,
+            featured: featured
         })
     
         return res

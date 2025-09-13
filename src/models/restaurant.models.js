@@ -21,7 +21,7 @@ const restaurantSchema = new mongoose.Schema({
     cuisine: [{
         type: String,
         required: true,
-        enum: ['Chinese', 'Italian', 'Indian', 'Japanese', 'French']
+        enum: ['Chinese', 'Italian', 'Indian', 'Japanese', 'French', 'Thai']
     }],
     ratings: {
         type: Number,
@@ -38,6 +38,10 @@ const restaurantSchema = new mongoose.Schema({
     isOpen: {
         type: Boolean,
         default: true
+    },
+    featured: {
+        type: Boolean,
+        default: false
     }
 },{timestamps: true})
 

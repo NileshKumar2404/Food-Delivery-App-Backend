@@ -16,7 +16,7 @@ const searchRestaurants = asyncHandler(async (req, res) => {
             {cuisine: {$regex: query, $options: 'i'}},
             {description: {$regex: query, $options: 'i'}},
         ]
-    }).select("name cuisine ratings address")
+    }).select("name cuisine ratings address image")
 
     return res
     .status(200)
@@ -38,7 +38,7 @@ const searchMenuItems = asyncHandler(async (req, res) => {
             {description: {$regex: query, $options: 'i'}},
             {category: {$regex: query, $options: 'i'}},
         ]
-    }).select("name cuisine ratings address")
+    }).select("name cuisine ratings address image")
 
     return res
     .status(200)
