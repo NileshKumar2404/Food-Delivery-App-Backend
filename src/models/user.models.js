@@ -34,7 +34,15 @@ const userSchema = new mongoose.Schema({
     vehicleDetails: {
         vehicleName: String,
         vehicleNumber: String
-    }
+    },
+    favouriteRestaurants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Restaurant'
+    }],
+    favouriteMenuItem: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'MenuItem'
+    }]
 },{timestamps: true})
 
 userSchema.pre('save', async function(next) {

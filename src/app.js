@@ -25,6 +25,7 @@ import orderRouter from "./routes/order.routes.js"
 import deliveryTrackingRouter from "./routes/deliveryTracking.routes.js"
 import reviewRouter from "./routes/review.routes.js"
 import searchRouter from "./routes/search.routes.js"
+import favouriteRouter from "./routes/favourite.routes.js"
 
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/address", addressRouter)
@@ -34,5 +35,6 @@ app.use("/api/v1/order", orderRouter)
 app.use("/api/v1/deliveryTracking", deliveryTrackingRouter)
 app.use("/api/v1/review", reviewRouter)
 app.use("/api/v1/search", searchRouter)
+app.use("/api/v1/favourite", favouriteRouter)
 
 export { app }
