@@ -85,7 +85,7 @@ export const removeFromFavourite = asyncHandler(async (req, res) => {
                     $pull: { favouriteMenuItem: menuItemId }
                 },
                 {new: true}
-            )
+            ).select("-refreshToken -password")
 
             if (!menuItem) throw new ApiError(404, "menuItem not found");
 
@@ -103,7 +103,7 @@ export const removeFromFavourite = asyncHandler(async (req, res) => {
                     $pull: { favouriteRestaurants: restaurantId }
                 },
                 {new: true}
-            )
+            ).select("-refreshToken -password")
 
             if (!restaurant) throw new ApiError(404, "restaurant not found");
 
@@ -133,7 +133,7 @@ export const getFavourites = asyncHandler(async (req, res) => {
     
         const favouriteRestaurants = await Restaurant.find(
             {_id: {$in: favouriteRestaurantIds}}
-        )
+        ).populate("address", "street city")
     
         const favouriteMenuItems = await MenuItem.find({
             _id: { $in: favouriteMenuItemIds }
