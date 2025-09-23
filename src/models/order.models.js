@@ -12,9 +12,9 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     items: [{
-        menuItem: {type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem'},
-        quantity: {type: Number, required: true},
-        price: {type: Number}
+        menuItem: {type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem', required: true},
+        quantity: {type: Number, required: true, min: 1},
+        price: {type: Number, required: true},
     }],
     totalPrice: {
         type: Number,

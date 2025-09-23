@@ -5,21 +5,28 @@ import { Address } from "../models/address.models.js"
 
 const addAddress = asyncHandler(async (req, res) => {
     try {
-        const {label, street, city, state, pinCode, coordinates} = req.body
+        const {name, phone, label, street, city, state, pinCode, coordinates} = req.body || {}
     
         if(!street || !city || !state || !pinCode) throw new ApiError(401, "These fields are required");
     
         const user = req.user?._id
         if(!user) throw new ApiError(401, "User not found.");
     
+        const coords = coordinates && coordinates.lat && coordinates.long
+            ? coordinates
+            : { lat: null, long: null }
+
+
         const createAddress = await Address.create({
             user,
+            name: req.user.name || name,
+            phone: req.user.phone || phone,
             label,
             street,
             city,
             state,
             pinCode,
-            coordinates
+            coordinates: coords
         })
     
         return res
@@ -35,8 +42,13 @@ const addAddress = asyncHandler(async (req, res) => {
     }
 })
 
-// TODO: Implement a role based address access
 const getUserAddresses = asyncHandler(async (req, res) => {
+    if (req.user.role !== 'customer') {
+        return res
+        .status(403)
+        .json(new ApiResponse(403, {}, "You are not authorize to access customer address"))
+    }
+
     const addresses = await Address.aggregate([
         {
             $match: {

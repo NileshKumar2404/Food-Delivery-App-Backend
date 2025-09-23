@@ -6,6 +6,12 @@ const addressSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    name: {
+        type: String,
+    },
+    phone: {
+        type: String,
+    },
     label: {
         type: String,
         default: 'Home',

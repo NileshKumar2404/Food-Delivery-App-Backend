@@ -108,13 +108,21 @@ const placeOrder = asyncHandler(async (req, res) => {
             const menuItem = await MenuItem.findById(item.menuItem)
             if(!menuItem) throw new ApiError(404, `Menu item not found: ${item.menuItem}`);
     
-            const itemTotal = menuItem.price * item.quantity
+            let numericPrice
+            if (typeof menuItem.price === "string") {
+                const match = menuItem.price.match(/[\d.]+/);
+                numericPrice = match ? parseFloat(match[0]) : 0
+            } else {
+                numericPrice = menuItem.price
+            }
+
+            const itemTotal = numericPrice * item.quantity
             totalPrice += itemTotal
     
             orderItems.push({
                 menuItem: menuItem._id,
                 quantity: item.quantity,
-                price: menuItem.price
+                price: numericPrice
             })
         }
     
