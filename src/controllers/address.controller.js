@@ -19,8 +19,8 @@ const addAddress = asyncHandler(async (req, res) => {
 
         const createAddress = await Address.create({
             user,
-            name: req.user.name || name,
-            phone: req.user.phone || phone,
+            name: name || req.user.name,
+            phone: phone || req.user.phone,
             label,
             street,
             city,
@@ -58,6 +58,8 @@ const getUserAddresses = asyncHandler(async (req, res) => {
         {
             $project: {
                 label: 1,
+                name: 1,
+                phone: 1,
                 street: 1,
                 city: 1,
                 state: 1,
@@ -76,7 +78,7 @@ const getUserAddresses = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(
         201, 
-        {addresses},
+        addresses,
         "Addresses fetched successfully."
     ))
 })
