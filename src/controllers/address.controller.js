@@ -85,19 +85,20 @@ const getUserAddresses = asyncHandler(async (req, res) => {
 
 const updateAddress = asyncHandler(async (req, res) => {
     try {
-        const {label, street, city, state, pinCode, coordinates} = req.body
+        const {name, phone, label, street, city, state, pinCode} = req.body
         const{addressId} = req.params
     
         const address = await Address.findOneAndUpdate(
             {_id: addressId, user: req.user._id},
             {
                 $set: {
+                    name,
+                    phone,
                     label,
                     street,
                     city,
                     state,
                     pinCode,
-                    coordinates
                 }
             },
             {new: true}

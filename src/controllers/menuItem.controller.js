@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { MenuItem } from "../models/menuItem.models.js";
 import { Restaurant } from "../models/restaurant.models.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js"
+import mongoose from "mongoose";
 
 const addMenuItem = asyncHandler(async (req, res) => {
     try {
@@ -85,6 +86,23 @@ const getMenuItemsByRestaurant = asyncHandler(async (req, res) => {
     }
 })
 
+const getMenuItemById = asyncHandler(async (req, res) => {
+    const {menuItemId} = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(menuItemId)) throw new ApiError(401, "Invalid menuitem id");
+    
+    const menuItem = await MenuItem.findById(menuItemId)
+    if (!menuItem) throw new ApiError(403, "Menuitem not found");
+
+    return res
+    .status(200)
+    .json(new ApiResponse(
+        200, 
+        {menuItem},
+        "Menuitem fetched successfully."
+    ))
+})
+
 const updateMenuItem = asyncHandler(async (req, res) => {
     try {
         const {menuItemId, restaurantId} = req.params
@@ -152,6 +170,7 @@ const deleteMenuItem = asyncHandler(async (req, res) => {
 export {
     addMenuItem,
     getMenuItemsByRestaurant,
+    getMenuItemById,
     updateMenuItem,
     deleteMenuItem,
 }
