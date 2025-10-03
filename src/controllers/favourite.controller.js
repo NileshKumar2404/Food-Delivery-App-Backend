@@ -54,7 +54,7 @@ export const addFavouriteMenuItem = asyncHandler(async (req, res) => {
                 $addToSet: { favouriteMenuItem: menuItemId }
             },
             {new: true}
-        )
+        ).select("-refreshToken")
     
         return res
         .status(200)
@@ -137,7 +137,7 @@ export const getFavourites = asyncHandler(async (req, res) => {
     
         const favouriteMenuItems = await MenuItem.find({
             _id: { $in: favouriteMenuItemIds }
-        })
+        }).populate("restaurant")
     
         return res
         .status(200)

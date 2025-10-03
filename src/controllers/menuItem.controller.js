@@ -91,7 +91,7 @@ const getMenuItemById = asyncHandler(async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(menuItemId)) throw new ApiError(401, "Invalid menuitem id");
     
-    const menuItem = await MenuItem.findById(menuItemId)
+    const menuItem = await MenuItem.findById(menuItemId).populate('restaurant')
     if (!menuItem) throw new ApiError(403, "Menuitem not found");
 
     return res
