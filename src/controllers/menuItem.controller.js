@@ -167,10 +167,27 @@ const deleteMenuItem = asyncHandler(async (req, res) => {
     }
 })
 
+const getAllMenuItem = asyncHandler(async (req, res) => {
+    const menuItems = await MenuItem.find().populate("restaurant", "name")
+
+    if (!menuItems.length) {
+        throw new ApiError(403, "Menuitems are not found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        menuItems,
+        "All menuitems are fetched successfully"
+    ))
+})
+
 export {
     addMenuItem,
     getMenuItemsByRestaurant,
     getMenuItemById,
     updateMenuItem,
     deleteMenuItem,
+    getAllMenuItem
 }

@@ -65,13 +65,23 @@ const removeCartItem = asyncHandler(async (req, res) => {
 
     if (req.user.role !== 'customer') throw new ApiError(401, "Only customers can remove items from their cart");
 
-    await Cart.findOneAndDelete({user: req.user._id, _id: cartItemId})
+    const deletedItem = await Cart.findOneAndDelete({user: req.user._id, _id: cartItemId})
+    if (!deletedItem) throw new ApiError(404, "Cart items are not found or it is already removed");
+
+    const cart = await Cart.find({user: req.user._id}).populate("menuItem")
+
+    const total = cart.reduce((sum, item) => {
+        const numericPrice = parseFloat(
+            item.menuItem.price.toString().replace(/[^0-9.]/g, "")
+        ) || 0
+        return sum + numericPrice * item.quantity
+    }, 0)
 
     return res
     .status(200)
     .json(new ApiResponse(
         200,
-        {},
+        {cart, total},
         "Item removed from the cart"
     ))
 })

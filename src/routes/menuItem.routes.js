@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {verifyJWT} from "../middlewares/auth.middlewares.js"
 import {upload} from "../middlewares/multer.middleware.js"
-import { addMenuItem, deleteMenuItem, getMenuItemById, getMenuItemsByRestaurant, updateMenuItem } from "../controllers/menuItem.controller.js";
+import { addMenuItem, deleteMenuItem, getAllMenuItem, getMenuItemById, getMenuItemsByRestaurant, updateMenuItem } from "../controllers/menuItem.controller.js";
 
 const router = Router()
 
@@ -10,5 +10,6 @@ router.route("/getMenuItemsByRestaurant/:restaurantId").get(getMenuItemsByRestau
 router.route("/update-menuItem/:restaurantId/:menuItemId").patch(verifyJWT, upload.single('image'), updateMenuItem)
 router.route("/delete-menuItem/:restaurantId/:menuItemId").delete(verifyJWT, deleteMenuItem)
 router.route("/get-menuItem/:menuItemId").get(verifyJWT, getMenuItemById)
+router.route("/get-all-menuItems").get(verifyJWT, getAllMenuItem)
 
 export default router

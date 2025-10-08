@@ -144,7 +144,7 @@ const getRestaurantById = asyncHandler(async (req, res) => {
 })
 
 const getMyRestaurant = asyncHandler(async (req, res) => {
-    const myRestaurant = await Restaurant.findOne({owner: req.user._id})
+    const myRestaurant = await Restaurant.find({owner: req.user._id})
 
     return res
     .status(201)
