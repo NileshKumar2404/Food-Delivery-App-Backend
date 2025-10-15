@@ -159,6 +159,26 @@ const getMyOrders = asyncHandler(async (req, res) => {
             $match: {customer: req.user._id}
         },
         {
+            $unwind: {
+                path: '$items',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $lookup: {
+                from: 'menuitems',
+                localField: 'items.menuItem',
+                foreignField: '_id',
+                as: 'menuItemDetails'
+            }
+        },
+        {
+            $unwind: {
+                path: '$menuItemDetails',
+                preserveNullAndEmptyArrays: true
+            }
+        }, 
+        {
             $lookup: {
                 from: 'restaurants',
                 localField: 'restaurant',
@@ -167,11 +187,9 @@ const getMyOrders = asyncHandler(async (req, res) => {
             }
         },
         {
-            $lookup: {
-                from: 'menuItems',
-                localField: 'items.menuItem',
-                foreignField: '_id',
-                as: 'menuItemDetails'
+            $unwind: {
+                path: '$restaurantDetails',
+                preserveNullAndEmptyArrays: true
             }
         },
         {
@@ -183,17 +201,50 @@ const getMyOrders = asyncHandler(async (req, res) => {
             }
         },
         {
+            $unwind: {
+                path: '$addressDetails',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $group: {
+                _id: '$_id',
+                totalPrice: { $first: '$totalPrice' },
+                status: { $first: "$status" },
+                createdAt: { $first: "$createdAt" },
+                payment: { $first: "$payment" },
+                restaurantDetails: { $first: "$restaurantDetails" },
+                addressDetails: { $first: "$addressDetails" },
+                menuItemDetails: {
+                    $push: {
+                        name: "$menuItemDetails.name",
+                        price: "$menuItemDetails.price",
+                        category: "$menuItemDetails.category",
+                        image: "$menuItemDetails.image"
+                    }
+                }
+            }
+        },
+        {
             $project: {
-                'restaurantDetails.name': 1,
-                'restaurantDetails.address': 1,
-                'restaurantDetails.cuisine': 1,
-                'restaurantDetails.ratings': 1,
-                'menuItemDetails.name': 1,
-                'menuItemDetails.price': 1,
-                'menuItemDetails.category': 1,
+                _id: 1,
                 totalPrice: 1,
-                deliveryAddress: 1,
-                payment: 1,
+                status: 1,
+                createdAt: 1,
+                'payment.method': 1,
+                'payment.status': 1,
+                'restaurantDetails._id': 1,
+                'restaurantDetails.name': 1,
+                'restaurantDetails.image': 1,
+                'restaurantDetails.ratings': 1,
+                'restaurantDetails.cuisine': 1,
+                'addressDetails.label': 1,
+                'addressDetails.phone': 1,
+                'addressDetails.street': 1,
+                'addressDetails.city': 1,
+                'addressDetails.state': 1,
+                'addressDetails.pinCode': 1,
+                menuItemDetails: 1
             }
         },
         {
@@ -203,7 +254,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
         }
     ])
 
-    if(!orders) throw new ApiError(404, "No orders found.");
+    if(!orders || orders.length === 0) throw new ApiError(404, "No orders found.");
 
     return res
     .status(200)
