@@ -22,7 +22,7 @@ export const addFavouriteRestaurant = asyncHandler(async (req, res) => {
                 $addToSet: { favouriteRestaurants: restaurantId }
             },
             {new: true}
-        )
+        ).select("-refreshToken")
     
         return res
         .status(200)
