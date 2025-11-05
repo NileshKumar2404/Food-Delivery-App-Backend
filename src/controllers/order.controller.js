@@ -217,6 +217,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
                 addressDetails: { $first: "$addressDetails" },
                 menuItemDetails: {
                     $push: {
+                        _id: "$menuItemDetails._id",
                         name: "$menuItemDetails.name",
                         price: "$menuItemDetails.price",
                         category: "$menuItemDetails.category",
