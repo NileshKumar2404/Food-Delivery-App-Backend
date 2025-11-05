@@ -177,8 +177,8 @@ const refreshAccessToken = asyncHandler(async ( req, res ) => {
         const user = await User.findById(decodedToken?._id)
         if(!user) throw new ApiError(401, "Refresh token expired");
     
-        if(incomingRefreshToken !== user?.refreshToken) {
-            throw new ApiError(401, "Refresh token expired or used")
+        if(!user?.refreshToken) {
+            throw new ApiError(401, "No refresh token stored")
         }
     
         const {accessToken, refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
