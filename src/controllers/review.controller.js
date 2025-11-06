@@ -21,7 +21,11 @@ const addReview = asyncHandler(async (req, res) => {
         }
 
         const existingReviews = await Review.findOne({customer: req.user._id, restaurant: restaurantId})
-        if (existingReviews) throw new ApiError(400, "You are already reviewed this item.")
+        if (existingReviews) {
+            return res
+            .status(402)
+            .json(new ApiResponse(402, {}, "You are already reviewed this item"))
+        }
 
         const review = await Review.create({
             customer: req.user._id,
