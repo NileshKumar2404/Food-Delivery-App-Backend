@@ -75,3 +75,13 @@ Role	Access
 Admin	Manage vendors, platform control
 Vendor	Add food items, manage orders
 User	Browse food, place orders
+
+
+📌 Note
+
+The frontend (Android app / Website) will use this backend through REST APIs.
+
+✍️ Author
+
+Nilesh
+Android App Developer & Full Stack Enthusiast
